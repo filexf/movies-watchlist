@@ -1,3 +1,5 @@
+import RatingStars from "./components/RatingStars";
+
 function WatchlistPage({
   watchlist,
   updateMovie,
@@ -7,6 +9,25 @@ function WatchlistPage({
   searchWatchlist,
   setSearchWatchlist,
 }) {
+  const sortedWatchlist = [...watchlist]
+    .filter((movie) =>
+      (movie.title || movie.Title || "")
+        .toLowerCase()
+        .includes(searchWatchlist.toLowerCase())
+    )
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "note":
+          return (b.rating || 0) - (a.rating || 0);
+        case "alpha":
+          return (a.title || a.Title || "").localeCompare(
+            b.title || b.Title || ""
+          );
+        default:
+          return 0;
+      }
+    });
+
   return (
     <div className="max-w-2xl mx-auto p-4">
       <h2 className="font-bold text-2xl mb-4 text-center text-sky-400">
@@ -30,10 +51,10 @@ function WatchlistPage({
         </select>
       </div>
       <div>
-        {watchlist.length === 0 && (
+        {sortedWatchlist.length === 0 && (
           <div className="text-gray-500 text-center">Aucun film ajouté.</div>
         )}
-        {watchlist.map((movie) => (
+        {sortedWatchlist.map((movie) => (
           <div
             key={movie.id || movie.imdbID}
             className="border border-sky-900 rounded p-3 mb-4 bg-neutral-800 shadow-sm flex flex-col md:flex-row gap-4 items-center"
@@ -52,31 +73,26 @@ function WatchlistPage({
                   ({(movie.release_date || movie.Year || "").split("-")[0]})
                 </span>
               </div>
-              <div className="flex items-center gap-2 mt-2">
-                <label className="text-sm text-gray-300">Note :</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="10"
-                  value={movie.rating}
-                  onChange={(e) =>
-                    updateMovie(movie.id || movie.imdbID, {
-                      rating: Number(e.target.value),
-                    })
-                  }
-                  className="w-16 border rounded px-1 py-0.5 bg-neutral-900 text-gray-100 border-neutral-700 focus:border-sky-600 focus:ring-0"
-                />
-              </div>
-              <div className="mt-2">
+              <div className="flex flex-wrap gap-4 items-center mt-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-400">Ma note :</span>
+                  <RatingStars
+                    rating={movie.rating || 0}
+                    onRate={(rating) =>
+                      updateMovie(movie.id || movie.imdbID, { rating })
+                    }
+                  />
+                </div>
                 <textarea
-                  className="w-full border rounded px-2 py-1 bg-neutral-900 text-gray-100 border-neutral-700 focus:border-sky-600 focus:ring-0"
-                  placeholder="Ton commentaire..."
-                  value={movie.comment}
+                  className="w-full p-2 mt-2 text-sm bg-neutral-700 text-gray-100 rounded border border-neutral-600 focus:border-sky-600 focus:ring-0"
+                  placeholder="Ajouter un commentaire..."
+                  value={movie.comment || ""}
                   onChange={(e) =>
                     updateMovie(movie.id || movie.imdbID, {
                       comment: e.target.value,
                     })
                   }
+                  rows="2"
                 />
               </div>
               <button
