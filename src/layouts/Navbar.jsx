@@ -1,4 +1,4 @@
-import { BookmarkIcon, GridIcon, SearchIcon } from "../components/icons/NavIcons";
+import { BookmarkIcon, GridIcon, SearchIcon } from "../icons/NavIcons";
 
 const Navbar = ({ page, setPage }) => {
   return (

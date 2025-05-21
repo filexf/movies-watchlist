@@ -1,7 +1,7 @@
-import AddToWatchlistButton from "./AddToWatchlistButton";
-import Button from "./Button";
+import AddToWatchlistButton from "../components/ui/AddToWatchlistButton";
+import Button from "../components/ui/Button";
 
-const CategorySection = ({
+const CategoryPage = ({
   categories,
   category,
   fetchCategoryMovies,
@@ -62,4 +62,4 @@ const CategorySection = ({
   );
 };
 
-export default CategorySection;
+export default CategoryPage;

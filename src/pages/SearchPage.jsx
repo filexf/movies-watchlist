@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import AddToWatchlistButton from "./AddToWatchlistButton";
+import AddToWatchlistButton from "../components/ui/AddToWatchlistButton";
 
 const searchSuggestions = [
   {
@@ -49,7 +49,7 @@ const searchSuggestions = [
   },
 ];
 
-const MovieSearch = ({
+const SearchPage = ({
   query,
   setQuery,
   searchMovies,
@@ -142,4 +142,4 @@ const MovieSearch = ({
   );
 };
 
-export default MovieSearch;
+export default SearchPage;
