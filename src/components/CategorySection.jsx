@@ -1,5 +1,5 @@
-import AddToWatchlistButton from "./AddToWatchlistButton";
-import Button from "./Button";
+import Button from "./ui/Button";
+import AddToWatchlistButton from "./ui/AddToWatchlistButton";
 
 const CategorySection = ({
   categories,

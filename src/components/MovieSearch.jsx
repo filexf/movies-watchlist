@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import AddToWatchlistButton from "./AddToWatchlistButton";
+import AddToWatchlistButton from "./ui/AddToWatchlistButton";
 
 const searchSuggestions = [
   {

@@ -1,5 +1,5 @@
 import { PlayIcon } from "./icons/ActionIcons";
-import RatingStars from "./RatingStars";
+import RatingStars from "./ui/RatingStars";
 
 const MovieDetails = ({
   movieDetails,

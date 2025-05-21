@@ -1,4 +1,4 @@
-import RatingStars from "./components/RatingStars";
+import RatingStars from "../components/ui/RatingStars";
 
 function WatchlistPage({
   watchlist,

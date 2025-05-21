@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import WatchlistPage from "./WatchlistPage";
 import CategorySection from "./components/CategorySection";
 import MovieDetails from "./components/MovieDetails";
 import MovieSearch from "./components/MovieSearch";
-import SavedNotification from "./components/SavedNotification";
+import SavedNotification from "./components/ui/SavedNotification";
 import Footer from "./layouts/Footer";
 import Navbar from "./layouts/Navbar";
+import WatchlistPage from "./pages/WatchlistPage";
 import {
   clearSelectedMovie,
   fetchCategoryMovies,
