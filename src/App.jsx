@@ -4,9 +4,9 @@ import WatchlistPage from "./WatchlistPage";
 import CategorySection from "./components/CategorySection";
 import MovieDetails from "./components/MovieDetails";
 import MovieSearch from "./components/MovieSearch";
-import Navbar from "./components/Navbar";
 import SavedNotification from "./components/SavedNotification";
-import Footer from "./components/Footer";
+import Footer from "./layouts/Footer";
+import Navbar from "./layouts/Navbar";
 import {
   clearSelectedMovie,
   fetchCategoryMovies,
@@ -127,6 +127,7 @@ function App() {
             updateMovie={(id, updates) =>
               dispatch(updateMovie({ id, updates }))
             }
+            removeFromWatchlist={(id) => dispatch(removeFromWatchlist(id))}
           />
         )}
 
