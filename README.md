@@ -77,26 +77,8 @@ The application uses the TMDB (The Movie Database) API to fetch:
 - Trailers
 - Cast and crew information
 
-## Contributing 🤝
-
-Contributions are welcome! Feel free to:
-
-1. Fork the project
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
-
-## License 📝
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
-## Author 👨‍💻
-
-[Your name] - [Your website/GitHub]
-
 ## Acknowledgments 🙏
 
-- TMDB for their excellent API
+- TMDB for their API
 - React community for their amazing tools and resources
 - All project contributors
