@@ -110,7 +110,7 @@ const SearchPage = ({
         </div>
       )}
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {results.map((movie) => (
           <div
             key={movie.id}
@@ -119,7 +119,7 @@ const SearchPage = ({
             <img
               src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
               alt={movie.title}
-              className="w-24 h-36 object-cover rounded mb-2 cursor-pointer hover:scale-105 transition-transform duration-200"
+              className="w-24 md:w-40 h-36 md:h-56 object-cover rounded mb-2 cursor-pointer hover:scale-105 transition-transform duration-200"
               onClick={() => fetchMovieDetails(movie)}
             />
             <div className="font-semibold text-center text-sm mb-1 text-gray-100">
