@@ -82,7 +82,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-900 bg-gradient-to-b from-neutral-900 to-neutral-800">
+    <main className="min-h-screen bg-neutral-900 bg-gradient-to-b from-neutral-900 to-neutral-800">
       <div className="max-w-2xl mx-auto p-4 bg-neutral-900/95 rounded-xl shadow-xl min-h-[80vh] border border-neutral-800">
         <h1 className="font-bold text-6xl text-center mt-8 mb-10 text-sky-100 drop-shadow-sm tracking-tight">
           The Movie Watchlist
@@ -142,13 +142,16 @@ function App() {
               dispatch(addToWatchlistWithTimeout(movie))
             }
             removeFromWatchlist={(id) => dispatch(removeFromWatchlist(id))}
+            updateMovie={(id, updates) =>
+              dispatch(updateMovie({ id, updates }))
+            }
           />
         )}
 
         <SavedNotification />
       </div>
       <Footer />
-    </div>
+    </main>
   );
 }
 

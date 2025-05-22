@@ -9,6 +9,7 @@ const MovieDetails = ({
   watchlist,
   addToWatchlist,
   removeFromWatchlist,
+  updateMovie,
 }) => {
   const watchlistMovie = watchlist.find((m) => m.id === selectedMovie.id);
   const isInWatchlist = !!watchlistMovie;
@@ -66,8 +67,7 @@ const MovieDetails = ({
                       <RatingStars
                         rating={watchlistMovie.rating}
                         onRate={(rating) =>
-                          removeFromWatchlist(selectedMovie.id) ||
-                          addToWatchlist({ ...selectedMovie, rating })
+                          updateMovie(selectedMovie.id, { rating })
                         }
                       />
                     </div>
