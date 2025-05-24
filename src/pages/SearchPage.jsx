@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import AddToWatchlistButton from "../components/ui/AddToWatchlistButton";
+import { ClearIcon } from "../icons/NavIcons";
 
 const searchSuggestions = [
   {
@@ -9,6 +10,8 @@ const searchSuggestions = [
       { text: "Matrix", emoji: "🕶" },
       { text: "Blade Runner", emoji: "🌆" },
       { text: "Interstellar", emoji: "🌌" },
+      { text: "Dune", emoji: "🏜️" },
+      { text: "Alien", emoji: "👽" },
     ],
   },
   {
@@ -18,6 +21,8 @@ const searchSuggestions = [
       { text: "Batman", emoji: "🦇" },
       { text: "Spider-Man", emoji: "🕷️" },
       { text: "Wonder Woman", emoji: "⚡" },
+      { text: "Black Panther", emoji: "🐆" },
+      { text: "Avengers", emoji: "🛡️" },
     ],
   },
   {
@@ -27,6 +32,8 @@ const searchSuggestions = [
       { text: "Pixar", emoji: "🪄" },
       { text: "Dragon", emoji: "🐉" },
       { text: "Toy Story", emoji: "🤠" },
+      { text: "Disney", emoji: "🏰" },
+      { text: "Frozen", emoji: "❄️" },
     ],
   },
   {
@@ -36,6 +43,8 @@ const searchSuggestions = [
       { text: "Seigneur des Anneaux", emoji: "💍" },
       { text: "Pirates des Caraïbes", emoji: "🏴‍☠️" },
       { text: "Narnia", emoji: "🦁" },
+      { text: "Avatar", emoji: "🌳" },
+      { text: "Game of Thrones", emoji: "🐲" },
     ],
   },
   {
@@ -45,6 +54,41 @@ const searchSuggestions = [
       { text: "Fight Club", emoji: "👊" },
       { text: "Pulp Fiction", emoji: "🕴️" },
       { text: "Retour vers le Futur", emoji: "⏰" },
+      { text: "Shawshank", emoji: "🔒" },
+      { text: "Godfather", emoji: "🎭" },
+    ],
+  },
+  {
+    category: "Thriller",
+    items: [
+      { text: "Seven", emoji: "🔍" },
+      { text: "Silence des Agneaux", emoji: "🦋" },
+      { text: "Gone Girl", emoji: "📓" },
+      { text: "Memento", emoji: "📷" },
+      { text: "Shutter Island", emoji: "🏝️" },
+      { text: "Prestige", emoji: "🎩" },
+    ],
+  },
+  {
+    category: "Comédie",
+    items: [
+      { text: "Hangover", emoji: "🎲" },
+      { text: "Superbad", emoji: "🎉" },
+      { text: "Bridesmaids", emoji: "👰" },
+      { text: "OSS 117", emoji: "🕵️" },
+      { text: "La Cité de la Peur", emoji: "🎪" },
+      { text: "Les Visiteurs", emoji: "⚔️" },
+    ],
+  },
+  {
+    category: "Romance",
+    items: [
+      { text: "Titanic", emoji: "🚢" },
+      { text: "La La Land", emoji: "🎹" },
+      { text: "Notebook", emoji: "📔" },
+      { text: "Amélie Poulain", emoji: "💝" },
+      { text: "Pretty Woman", emoji: "👠" },
+      { text: "Love Actually", emoji: "🎄" },
     ],
   },
 ];
@@ -71,24 +115,36 @@ const SearchPage = ({
   return (
     <div>
       <div className="flex gap-2 mb-4">
-        <input
-          className="border rounded px-4 py-2 flex-1 bg-neutral-800 text-gray-100 placeholder-gray-400 border-neutral-700 focus:border-sky-600 focus:ring-0"
-          placeholder="Rechercher un film..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+        <div className="relative flex-1">
+          <input
+            className="w-full border rounded px-4 py-2 bg-neutral-800 text-gray-100 placeholder-gray-400 border-neutral-700 focus:border-sky-600 focus:ring-0 pr-10"
+            placeholder="Rechercher un film..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          {query && (
+            <button
+              onClick={() => setQuery("")}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 p-1.5 rounded-full hover:bg-neutral-700/50 transition-colors"
+              aria-label="Effacer la recherche"
+            >
+              <ClearIcon />
+            </button>
+          )}
+        </div>
       </div>
 
       {!query && (
         <div className="mb-8">
-          <div className="text-sm text-gray-400 mb-3">
+          <div className="text-lg md:text-xl text-gray-100 font-semibold mb-6">
             Découvrez des films par catégorie :
           </div>
-          <div className="space-y-4">
+          <div className="space-y-6">
             {searchSuggestions.map((category) => (
               <div key={category.category}>
-                <div className="text-sky-400 text-base font-medium mb-4">
+                <div className="text-sky-400 text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
                   {category.category}
+                  <div className="h-px flex-1 bg-sky-900/30"></div>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {category.items.map(({ text, emoji }) => (
