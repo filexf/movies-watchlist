@@ -17,7 +17,7 @@ A modern web application to discover, search, and organize your favorite movies.
   - Access to trailers
   - Cast and crew information
   - Release year and duration
-  - TMDB average rating
+  - TMDB average rating 
 
 ## Technologies Used 🛠
 
