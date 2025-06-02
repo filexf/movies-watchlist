@@ -2,7 +2,7 @@ import { BookmarkIcon, GridIcon, SearchIcon } from "../icons/NavIcons";
 
 const Navbar = ({ page, setPage }) => {
   return (
-    <nav className="sticky top-0 z-30 bg-neutral-900/90 backdrop-blur border-b border-sky-900 flex justify-center gap-2 md:gap-4 mb-8 pb-2 md:pb-4 pt-2 md:pt-4 shadow-sm">
+    <nav className="sticky top-0 z-[200] bg-neutral-900/90 backdrop-blur border-b border-sky-900 flex justify-center gap-2 md:gap-4 pb-2 md:pb-4 pt-2 md:pt-4 shadow-sm">
       <button
         className={`font-semibold px-2 md:px-4 py-1 md:py-2 rounded-t-lg transition-all duration-200 tracking-wide text-sm md:text-lg shadow-sm border-b-4 ${
           page === "categories"
