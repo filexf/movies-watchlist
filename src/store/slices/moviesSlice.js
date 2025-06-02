@@ -21,33 +21,27 @@ export const fetchCategoryMovies = createAsyncThunk(
   "movies/fetchCategory",
   async (category) => {
     let url;
-    const numberOfPages = 3; // Fetch 3 pages of results
-    let allResults = [];
+    const page = 1; // Start with first page
+    let results;
 
     if (category === "") {
       // For "All" category, use popular movies endpoint
-      for (let page = 1; page <= numberOfPages; page++) {
-        url = `https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_API_KEY}&language=fr-FR&page=${page}`;
-        const res = await fetch(url);
-        const data = await res.json();
-        if (data.results) {
-          allResults = [...allResults, ...data.results];
-        }
-      }
+      url = `https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_API_KEY}&language=fr-FR&page=${page}`;
     } else {
       // For specific categories
-      for (let page = 1; page <= numberOfPages; page++) {
-        url = `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&language=fr-FR&page=${page}`;
-        url += `&with_genres=${getGenreId(category)}&sort_by=popularity.desc`;
-        const res = await fetch(url);
-        const data = await res.json();
-        if (data.results) {
-          allResults = [...allResults, ...data.results];
-        }
-      }
+      url = `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&language=fr-FR&page=${page}`;
+      url += `&with_genres=${getGenreId(category)}&sort_by=popularity.desc`;
     }
 
-    return allResults;
+    const res = await fetch(url);
+    const data = await res.json();
+    results = {
+      movies: data.results || [],
+      totalPages: Math.min(data.total_pages, 10), // Limit to 10 pages max
+      currentPage: page,
+    };
+
+    return results;
   }
 );
 
@@ -59,6 +53,24 @@ export const fetchMovieDetails = createAsyncThunk(
     );
     const data = await res.json();
     return data;
+  }
+);
+
+export const loadMoreMovies = createAsyncThunk(
+  "movies/loadMore",
+  async ({ category, page }) => {
+    let url;
+
+    if (category === "") {
+      url = `https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_API_KEY}&language=fr-FR&page=${page}`;
+    } else {
+      url = `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&language=fr-FR&page=${page}`;
+      url += `&with_genres=${getGenreId(category)}&sort_by=popularity.desc`;
+    }
+
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.results || [];
   }
 );
 
@@ -86,7 +98,10 @@ const moviesSlice = createSlice({
     movieDetails: null,
     category: "",
     loadingCategory: false,
+    loadingMore: false,
     loadingDetails: false,
+    currentPage: 1,
+    totalPages: 1,
     error: null,
   },
   reducers: {
@@ -118,7 +133,9 @@ const moviesSlice = createSlice({
         state.loadingCategory = true;
       })
       .addCase(fetchCategoryMovies.fulfilled, (state, action) => {
-        state.categoryMovies = action.payload;
+        state.categoryMovies = action.payload.movies;
+        state.currentPage = action.payload.currentPage;
+        state.totalPages = action.payload.totalPages;
         state.loadingCategory = false;
       })
       .addCase(fetchMovieDetails.pending, (state) => {
@@ -128,6 +145,18 @@ const moviesSlice = createSlice({
         state.movieDetails = action.payload;
         state.selectedMovie = action.payload;
         state.loadingDetails = false;
+      })
+      .addCase(loadMoreMovies.pending, (state) => {
+        state.loadingMore = true;
+      })
+      .addCase(loadMoreMovies.fulfilled, (state, action) => {
+        state.categoryMovies = [...state.categoryMovies, ...action.payload];
+        state.currentPage += 1;
+        state.loadingMore = false;
+      })
+      .addCase(loadMoreMovies.rejected, (state, action) => {
+        state.error = action.error.message;
+        state.loadingMore = false;
       });
   },
 });

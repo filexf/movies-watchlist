@@ -1,5 +1,8 @@
+import { useCallback, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import AddToWatchlistButton from "../components/ui/AddToWatchlistButton";
 import Button from "../components/ui/Button";
+import { loadMoreMovies } from "../store/slices/moviesSlice";
 
 const CategoryPage = ({
   categories,
@@ -10,6 +13,26 @@ const CategoryPage = ({
   fetchMovieDetails,
   addToWatchlist,
 }) => {
+  const dispatch = useDispatch();
+  const { currentPage, totalPages, loadingMore } = useSelector(
+    (state) => state.movies
+  );
+  const observer = useRef();
+
+  const lastMovieElementRef = useCallback(
+    (node) => {
+      if (loadingCategory || loadingMore) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && currentPage < totalPages) {
+          dispatch(loadMoreMovies({ category, page: currentPage + 1 }));
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loadingCategory, loadingMore, currentPage, totalPages, category]
+  );
+
   return (
     <div className="mb-8">
       <div className="flex flex-wrap gap-2 mb-8 justify-center">
@@ -30,9 +53,12 @@ const CategoryPage = ({
 
       {!loadingCategory && categoryMovies.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {categoryMovies.map((movie) => (
+          {categoryMovies.map((movie, index) => (
             <div
               key={movie.id}
+              ref={
+                index === categoryMovies.length - 1 ? lastMovieElementRef : null
+              }
               className="bg-neutral-800 rounded-lg shadow p-3 flex flex-col items-center border border-sky-900/30 hover:border-sky-900 transition-colors duration-200"
             >
               <img
@@ -50,6 +76,12 @@ const CategoryPage = ({
               <AddToWatchlistButton movie={movie} onAdd={addToWatchlist} />
             </div>
           ))}
+        </div>
+      )}
+
+      {loadingMore && (
+        <div className="text-center text-sky-400 mt-4">
+          Chargement de plus de films...
         </div>
       )}
 
