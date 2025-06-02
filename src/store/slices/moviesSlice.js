@@ -21,16 +21,33 @@ export const fetchCategoryMovies = createAsyncThunk(
   "movies/fetchCategory",
   async (category) => {
     let url;
+    const numberOfPages = 3; // Fetch 3 pages of results
+    let allResults = [];
+
     if (category === "") {
-      // Pour la catégorie "Tous", on utilise l'endpoint des films populaires
-      url = `https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_API_KEY}&language=fr-FR`;
+      // For "All" category, use popular movies endpoint
+      for (let page = 1; page <= numberOfPages; page++) {
+        url = `https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_API_KEY}&language=fr-FR&page=${page}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.results) {
+          allResults = [...allResults, ...data.results];
+        }
+      }
     } else {
-      url = `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&language=fr-FR`;
-      url += `&with_genres=${getGenreId(category)}&sort_by=popularity.desc`;
+      // For specific categories
+      for (let page = 1; page <= numberOfPages; page++) {
+        url = `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&language=fr-FR&page=${page}`;
+        url += `&with_genres=${getGenreId(category)}&sort_by=popularity.desc`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.results) {
+          allResults = [...allResults, ...data.results];
+        }
+      }
     }
-    const res = await fetch(url);
-    const data = await res.json();
-    return data.results || [];
+
+    return allResults;
   }
 );
 
