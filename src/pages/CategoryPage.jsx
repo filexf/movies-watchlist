@@ -35,7 +35,7 @@ const CategoryPage = ({
 
   return (
     <div className="mb-8">
-      <div className="sticky top-[72px] z-[150] py-4 bg-neutral-900/95 backdrop-blur-sm border-b border-neutral-800 shadow-lg">
+      <div className="sticky top-[72px] z-30 py-4 bg-neutral-900/95 backdrop-blur-sm border-b border-neutral-800 shadow-lg">
         <div className="flex flex-wrap gap-2 pt-3 pb-1 justify-center max-w-5xl mx-auto px-4">
           {categories.map((cat) => (
             <Button
