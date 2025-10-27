@@ -1,8 +1,17 @@
+"use client";
+
+import Image from "next/image";
 import { useEffect } from "react";
 import AddToWatchlistButton from "../components/ui/AddToWatchlistButton";
 import { ClearIcon } from "../icons/NavIcons";
+import { Movie } from "../store/slices/moviesSlice";
 
-const searchSuggestions = [
+interface SearchSuggestion {
+  category: string;
+  items: Array<{ text: string; emoji: string }>;
+}
+
+const searchSuggestions: SearchSuggestion[] = [
   {
     category: "Science-Fiction",
     items: [
@@ -93,6 +102,15 @@ const searchSuggestions = [
   },
 ];
 
+interface SearchPageProps {
+  query: string;
+  setQuery: (query: string) => void;
+  searchMovies: (e: { preventDefault: () => void }) => void;
+  results: Movie[];
+  fetchMovieDetails: (movie: Movie) => void;
+  addToWatchlist: (movie: Movie) => void;
+}
+
 const SearchPage = ({
   query,
   setQuery,
@@ -100,14 +118,14 @@ const SearchPage = ({
   results,
   fetchMovieDetails,
   addToWatchlist,
-}) => {
-  // Effectuer la recherche automatiquement quand l'utilisateur tape
+}: SearchPageProps) => {
+  // Search automatically when user types
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (query.length >= 1) {
         searchMovies({ preventDefault: () => {} });
       }
-    }, 300); // Délai de 300ms pour éviter trop d'appels API
+    }, 300); // 300ms delay to avoid too many API calls
 
     return () => clearTimeout(timeoutId);
   }, [query, searchMovies]);
@@ -172,9 +190,12 @@ const SearchPage = ({
             key={movie.id}
             className="bg-neutral-800 rounded-lg shadow p-3 flex flex-col items-center border border-sky-900/30 hover:border-sky-900 transition-colors duration-200"
           >
-            <img
+            <Image
               src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
               alt={movie.title}
+              width={160}
+              height={224}
+              unoptimized
               className="w-24 md:w-40 h-36 md:h-56 object-cover rounded mb-2 cursor-pointer hover:scale-105 transition-transform duration-200"
               onClick={() => fetchMovieDetails(movie)}
             />

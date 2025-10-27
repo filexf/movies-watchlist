@@ -1,10 +1,55 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || "";
+
+export interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  release_date: string;
+  vote_average?: number;
+  vote_count?: number;
+  overview?: string;
+  runtime?: number;
+  homepage?: string;
+  backdrop_path?: string;
+  credits?: {
+    cast: Array<{
+      cast_id: number;
+      name: string;
+      character?: string;
+    }>;
+    crew: Array<{
+      name: string;
+      job: string;
+    }>;
+  };
+  videos?: {
+    results: Array<{
+      key: string;
+      name: string;
+    }>;
+  };
+}
+
+interface MoviesState {
+  query: string;
+  results: Movie[];
+  categoryMovies: Movie[];
+  selectedMovie: Movie | null;
+  movieDetails: Movie | null;
+  category: string;
+  loadingCategory: boolean;
+  loadingMore: boolean;
+  loadingDetails: boolean;
+  currentPage: number;
+  totalPages: number;
+  error: string | null;
+}
 
 export const searchMovies = createAsyncThunk(
   "movies/search",
-  async ({ query, category }) => {
+  async ({ query, category }: { query: string; category: string }) => {
     let url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(
       query
     )}`;
@@ -19,10 +64,9 @@ export const searchMovies = createAsyncThunk(
 
 export const fetchCategoryMovies = createAsyncThunk(
   "movies/fetchCategory",
-  async (category) => {
-    let url;
+  async (category: string) => {
+    let url: string;
     const page = 1; // Start with first page
-    let results;
 
     if (category === "") {
       // For "All" category, use popular movies endpoint
@@ -35,7 +79,7 @@ export const fetchCategoryMovies = createAsyncThunk(
 
     const res = await fetch(url);
     const data = await res.json();
-    results = {
+    const results = {
       movies: data.results || [],
       totalPages: Math.min(data.total_pages, 10), // Limit to 10 pages max
       currentPage: page,
@@ -47,7 +91,7 @@ export const fetchCategoryMovies = createAsyncThunk(
 
 export const fetchMovieDetails = createAsyncThunk(
   "movies/fetchDetails",
-  async (movieId) => {
+  async (movieId: number) => {
     const res = await fetch(
       `https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}&append_to_response=videos,credits`
     );
@@ -58,8 +102,8 @@ export const fetchMovieDetails = createAsyncThunk(
 
 export const loadMoreMovies = createAsyncThunk(
   "movies/loadMore",
-  async ({ category, page }) => {
-    let url;
+  async ({ category, page }: { category: string; page: number }) => {
+    let url: string;
 
     if (category === "") {
       url = `https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_API_KEY}&language=fr-FR&page=${page}`;
@@ -74,8 +118,8 @@ export const loadMoreMovies = createAsyncThunk(
   }
 );
 
-function getGenreId(cat) {
-  const genreMap = {
+function getGenreId(cat: string): string {
+  const genreMap: { [key: string]: number } = {
     Action: 28,
     Comedy: 35,
     Drama: 18,
@@ -85,7 +129,7 @@ function getGenreId(cat) {
     Romance: 10749,
     Documentary: 99,
   };
-  return genreMap[cat] || "";
+  return genreMap[cat]?.toString() || "";
 }
 
 const moviesSlice = createSlice({
@@ -103,7 +147,7 @@ const moviesSlice = createSlice({
     currentPage: 1,
     totalPages: 1,
     error: null,
-  },
+  } as MoviesState,
   reducers: {
     setQuery: (state, action) => {
       state.query = action.payload;
@@ -126,7 +170,7 @@ const moviesSlice = createSlice({
         state.loadingCategory = false;
       })
       .addCase(searchMovies.rejected, (state, action) => {
-        state.error = action.error.message;
+        state.error = action.error.message || "An error occurred";
         state.loadingCategory = false;
       })
       .addCase(fetchCategoryMovies.pending, (state) => {
@@ -155,7 +199,7 @@ const moviesSlice = createSlice({
         state.loadingMore = false;
       })
       .addCase(loadMoreMovies.rejected, (state, action) => {
-        state.error = action.error.message;
+        state.error = action.error.message || "An error occurred";
         state.loadingMore = false;
       });
   },

@@ -1,4 +1,19 @@
+"use client";
+
+import Image from "next/image";
 import RatingStars from "../components/ui/RatingStars";
+import { WatchlistMovie } from "../store/slices/watchlistSlice";
+
+interface WatchlistPageProps {
+  watchlist: WatchlistMovie[];
+  fetchMovieDetails?: (movie: { id: number }) => void;
+  updateMovie: (id: number, updates: Partial<WatchlistMovie>) => void;
+  removeFromWatchlist: (id: number) => void;
+  sortBy: "date" | "note" | "alpha";
+  setSortBy: (sort: "date" | "note" | "alpha") => void;
+  searchWatchlist: string;
+  setSearchWatchlist: (term: string) => void;
+}
 
 function WatchlistPage({
   watchlist,
@@ -8,21 +23,17 @@ function WatchlistPage({
   setSortBy,
   searchWatchlist,
   setSearchWatchlist,
-}) {
+}: WatchlistPageProps) {
   const sortedWatchlist = [...watchlist]
     .filter((movie) =>
-      (movie.title || movie.Title || "")
-        .toLowerCase()
-        .includes(searchWatchlist.toLowerCase())
+      (movie.title || "").toLowerCase().includes(searchWatchlist.toLowerCase())
     )
     .sort((a, b) => {
       switch (sortBy) {
         case "note":
           return (b.rating || 0) - (a.rating || 0);
         case "alpha":
-          return (a.title || a.Title || "").localeCompare(
-            b.title || b.Title || ""
-          );
+          return (a.title || "").localeCompare(b.title || "");
         default:
           return 0;
       }
@@ -43,9 +54,11 @@ function WatchlistPage({
         <select
           className="border rounded px-2 py-1 bg-neutral-800 text-gray-100 border-neutral-700 focus:border-sky-600 focus:ring-0"
           value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
+          onChange={(e) =>
+            setSortBy(e.target.value as "date" | "note" | "alpha")
+          }
         >
-          <option value="date">Ordre d'ajout</option>
+          <option value="date">Ordre d&apos;ajout</option>
           <option value="note">Note</option>
           <option value="alpha">Alphabétique</option>
         </select>
@@ -56,21 +69,22 @@ function WatchlistPage({
         )}
         {sortedWatchlist.map((movie) => (
           <div
-            key={movie.id || movie.imdbID}
+            key={movie.id}
             className="border border-sky-900 rounded p-3 mb-4 bg-neutral-800 shadow-sm flex flex-col md:flex-row gap-4 items-center"
           >
-            <img
-              src={`https://image.tmdb.org/t/p/w200${
-                movie.poster_path || movie.Poster
-              }`}
-              alt=""
+            <Image
+              src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+              alt={movie.title}
+              width={80}
+              height={112}
+              unoptimized
               className="w-20 h-28 object-cover rounded"
             />
             <div className="flex-1 w-full">
               <div className="font-semibold text-lg text-gray-100">
-                {movie.title || movie.Title}{" "}
+                {movie.title}{" "}
                 <span className="text-gray-400 font-normal">
-                  ({(movie.release_date || movie.Year || "").split("-")[0]})
+                  ({(movie.release_date || "").split("-")[0]})
                 </span>
               </div>
               <div className="flex flex-wrap gap-4 items-center mt-2">
@@ -78,9 +92,7 @@ function WatchlistPage({
                   <span className="text-sm text-gray-400">Ma note :</span>
                   <RatingStars
                     rating={movie.rating || 0}
-                    onRate={(rating) =>
-                      updateMovie(movie.id || movie.imdbID, { rating })
-                    }
+                    onRate={(rating) => updateMovie(movie.id, { rating })}
                   />
                 </div>
                 <textarea
@@ -88,16 +100,16 @@ function WatchlistPage({
                   placeholder="Ajouter un commentaire..."
                   value={movie.comment || ""}
                   onChange={(e) =>
-                    updateMovie(movie.id || movie.imdbID, {
+                    updateMovie(movie.id, {
                       comment: e.target.value,
                     })
                   }
-                  rows="2"
+                  rows={2}
                 />
               </div>
               <button
                 className="mt-2 text-red-400 hover:underline text-sm"
-                onClick={() => removeFromWatchlist(movie.id || movie.imdbID)}
+                onClick={() => removeFromWatchlist(movie.id)}
               >
                 Supprimer
               </button>

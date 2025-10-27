@@ -1,6 +1,13 @@
+"use client";
+
 import { BookmarkIcon, GridIcon, SearchIcon } from "../icons/NavIcons";
 
-const Navbar = ({ page, setPage }) => {
+interface NavbarProps {
+  page: string;
+  setPage: (page: string) => void;
+}
+
+const Navbar = ({ page, setPage }: NavbarProps) => {
   return (
     <div className="sticky top-0 z-40 bg-neutral-900/90 backdrop-blur border-b border-sky-900">
       <nav className="max-w-7xl mx-auto px-4 flex justify-center gap-2 md:gap-4 pb-2 md:pb-4 pt-2 md:pt-4 shadow-sm">

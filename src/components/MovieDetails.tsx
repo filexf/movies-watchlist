@@ -1,5 +1,21 @@
+"use client";
+
+import Image from "next/image";
 import { PlayIcon } from "../icons/ActionIcons";
+import { Movie } from "../store/slices/moviesSlice";
+import { WatchlistMovie } from "../store/slices/watchlistSlice";
 import RatingStars from "./ui/RatingStars";
+
+interface MovieDetailsProps {
+  movieDetails: Movie;
+  selectedMovie: Movie;
+  loadingDetails: boolean;
+  setSelectedMovie: () => void;
+  watchlist: WatchlistMovie[];
+  addToWatchlist: (movie: Movie) => void;
+  removeFromWatchlist: (id: number) => void;
+  updateMovie: (id: number, updates: Partial<WatchlistMovie>) => void;
+}
 
 const MovieDetails = ({
   movieDetails,
@@ -10,7 +26,7 @@ const MovieDetails = ({
   addToWatchlist,
   removeFromWatchlist,
   updateMovie,
-}) => {
+}: MovieDetailsProps) => {
   const watchlistMovie = watchlist.find((m) => m.id === selectedMovie.id);
   const isInWatchlist = !!watchlistMovie;
 
@@ -20,7 +36,7 @@ const MovieDetails = ({
         <button
           className="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl"
           onClick={() => {
-            setSelectedMovie(null);
+            setSelectedMovie();
           }}
           aria-label="Fermer"
         >
@@ -32,9 +48,12 @@ const MovieDetails = ({
         ) : (
           <>
             <div className="flex gap-4 mb-4">
-              <img
+              <Image
                 src={`https://image.tmdb.org/t/p/w200${movieDetails.poster_path}`}
-                alt=""
+                alt={movieDetails.title}
+                width={112}
+                height={160}
+                unoptimized
                 className="w-28 h-40 object-cover rounded"
               />
               <div className="flex-1">
@@ -104,36 +123,38 @@ const MovieDetails = ({
               </div>
             </div>
 
-            {movieDetails.videos?.results?.length > 0 && (
-              <div className="mb-3">
-                <div className="font-semibold mb-1">Bande annonce</div>
-                <a
-                  href={`https://www.youtube.com/watch?v=${movieDetails.videos.results[0].key}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center bg-sky-600 hover:bg-sky-700 text-white font-medium px-5 py-2 rounded-lg transition-colors duration-200"
-                >
-                  <PlayIcon className="w-5 h-5 mr-2" />
-                  Voir la bande annonce
-                </a>
-              </div>
-            )}
-
-            {movieDetails.credits?.cast?.length > 0 && (
-              <div className="mb-3">
-                <div className="font-semibold mb-1">Acteurs principaux</div>
-                <div className="flex flex-wrap gap-2 text-sm">
-                  {movieDetails.credits.cast.slice(0, 5).map((actor) => (
-                    <span
-                      key={actor.cast_id}
-                      className="bg-neutral-800 px-2 py-1 rounded-full text-gray-200"
-                    >
-                      {actor.name}
-                    </span>
-                  ))}
+            {movieDetails.videos?.results &&
+              movieDetails.videos.results.length > 0 && (
+                <div className="mb-3">
+                  <div className="font-semibold mb-1">Bande annonce</div>
+                  <a
+                    href={`https://www.youtube.com/watch?v=${movieDetails.videos.results[0].key}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center bg-sky-600 hover:bg-sky-700 text-white font-medium px-5 py-2 rounded-lg transition-colors duration-200"
+                  >
+                    <PlayIcon className="w-5 h-5 mr-2" />
+                    Voir la bande annonce
+                  </a>
                 </div>
-              </div>
-            )}
+              )}
+
+            {movieDetails.credits?.cast &&
+              movieDetails.credits.cast.length > 0 && (
+                <div className="mb-3">
+                  <div className="font-semibold mb-1">Acteurs principaux</div>
+                  <div className="flex flex-wrap gap-2 text-sm">
+                    {movieDetails.credits.cast.slice(0, 5).map((actor) => (
+                      <span
+                        key={actor.cast_id}
+                        className="bg-neutral-800 px-2 py-1 rounded-full text-gray-200"
+                      >
+                        {actor.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
             <div className="mt-4">
               {isInWatchlist ? (

@@ -1,8 +1,13 @@
+"use client";
+
 import { useSelector } from "react-redux";
 import { CheckIcon } from "../../icons/ActionIcons";
+import { RootState } from "../../store";
 
 function SavedNotification() {
-  const showSaved = useSelector((state) => state.watchlist.showSaved);
+  const showSaved = useSelector(
+    (state: RootState) => state.watchlist.showSaved
+  );
 
   return (
     <div

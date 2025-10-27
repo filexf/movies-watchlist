@@ -1,10 +1,19 @@
+"use client";
+
 import { useDispatch, useSelector } from "react-redux";
 import { AddIcon, RemoveIcon } from "../../icons/ActionIcons";
+import { AppDispatch, RootState } from "../../store";
+import { Movie } from "../../store/slices/moviesSlice";
 import { removeFromWatchlist } from "../../store/slices/watchlistSlice";
 
-const AddToWatchlistButton = ({ movie, onAdd }) => {
-  const dispatch = useDispatch();
-  const watchlist = useSelector((state) => state.watchlist.items);
+interface AddToWatchlistButtonProps {
+  movie: Movie;
+  onAdd: (movie: Movie) => void;
+}
+
+const AddToWatchlistButton = ({ movie, onAdd }: AddToWatchlistButtonProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const watchlist = useSelector((state: RootState) => state.watchlist.items);
   const isInWatchlist = watchlist.some((m) => m.id === movie.id);
 
   const handleClick = () => {
