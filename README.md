@@ -17,14 +17,15 @@ A modern web application to discover, search, and organize your favorite movies.
   - Access to trailers
   - Cast and crew information
   - Release year and duration
-  - TMDB average rating 
+  - TMDB average rating
 
 ## Technologies Used 🛠
 
+- **Next.js 15**: Modern React framework with server-side rendering
+- **TypeScript**: Type-safe development
 - **React 19**: Modern and reactive user interface
 - **Redux Toolkit**: Centralized state management
 - **Tailwind CSS**: Elegant and responsive styling
-- **Vite**: Fast and modern build tool
 - **TMDB API**: Movie data source
 
 ## Getting Started 🚀
@@ -42,10 +43,10 @@ cd movies-watchlist
 npm install
 ```
 
-3. Create a `.env` file in the project root with your TMDB API key:
+3. Create a `.env.local` file in the project root with your TMDB API key:
 
 ```
-API_KEY=your_api_key
+NEXT_PUBLIC_TMDB_API_KEY=your_api_key
 ```
 
 4. Start the development server:
@@ -54,17 +55,28 @@ API_KEY=your_api_key
 npm run dev
 ```
 
-5. Open [http://localhost:5173](http://localhost:5173) in your browser.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Building for Production 🏗
+
+```bash
+npm run build
+npm start
+```
 
 ## Project Structure 📁
 
 ```
 src/
-├── components/     # Reusable components
-├── layouts/        # Layout components
-├── pages/         # Page components
-├── store/         # Redux configuration and slices
-└── features/      # Feature-organized functionality
+├── app/              # Next.js app directory
+│   ├── layout.tsx    # Root layout
+│   ├── page.tsx      # Home page
+│   └── providers.tsx  # Redux provider
+├── components/        # Reusable components
+├── layouts/          # Layout components
+├── pages/            # Page components
+├── store/            # Redux configuration and slices
+└── icons/            # Icon components
 ```
 
 ## API 🔧
@@ -77,8 +89,21 @@ The application uses the TMDB (The Movie Database) API to fetch:
 - Trailers
 - Cast and crew information
 
+Get your API key from [https://www.themoviedb.org/](https://www.themoviedb.org/)
+
+## TypeScript 🎯
+
+This project is fully typed with TypeScript for better developer experience and code safety.
+
+## Scripts 📝
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+
 ## Acknowledgments 🙏
 
 - TMDB for their API
-- React community for their amazing tools and resources
+- Next.js and React communities for their amazing tools and resources
 - All project contributors

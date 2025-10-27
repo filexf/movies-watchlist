@@ -1,28 +1,43 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { Movie } from "./moviesSlice";
 
-// Fonction pour charger la watchlist depuis le localStorage
-const loadFromLocalStorage = () => {
+export interface WatchlistMovie extends Movie {
+  comment: string;
+  rating: number;
+}
+
+interface WatchlistState {
+  items: WatchlistMovie[];
+  sortBy: "date" | "note" | "alpha";
+  searchTerm: string;
+  showSaved: boolean;
+}
+
+// Function to load watchlist from localStorage
+const loadFromLocalStorage = (): WatchlistMovie[] => {
+  if (typeof window === "undefined") return [];
   try {
     const saved = localStorage.getItem("watchlist");
     return saved ? JSON.parse(saved) : [];
   } catch (error) {
-    console.error("Erreur lors du chargement de la watchlist:", error);
+    console.error("Error loading watchlist:", error);
     return [];
   }
 };
 
-// Fonction pour sauvegarder la watchlist dans le localStorage
-const saveToLocalStorage = (items) => {
+// Function to save watchlist to localStorage
+const saveToLocalStorage = (items: WatchlistMovie[]) => {
+  if (typeof window === "undefined") return;
   try {
     localStorage.setItem("watchlist", JSON.stringify(items));
   } catch (error) {
-    console.error("Erreur lors de la sauvegarde de la watchlist:", error);
+    console.error("Error saving watchlist:", error);
   }
 };
 
 export const addToWatchlistWithTimeout = createAsyncThunk(
   "watchlist/addWithTimeout",
-  async (movie, { dispatch }) => {
+  async (movie: Movie, { dispatch }) => {
     dispatch(addToWatchlist(movie));
     await new Promise((resolve) => setTimeout(resolve, 3700));
     dispatch(setShowSaved(false));
@@ -34,10 +49,10 @@ const watchlistSlice = createSlice({
   name: "watchlist",
   initialState: {
     items: loadFromLocalStorage(),
-    sortBy: "date",
+    sortBy: "date" as const,
     searchTerm: "",
     showSaved: false,
-  },
+  } as WatchlistState,
   reducers: {
     addToWatchlist: (state, action) => {
       const movie = action.payload;
@@ -84,5 +99,4 @@ export const {
   setShowSaved,
   initializeWatchlist,
 } = watchlistSlice.actions;
-
 export default watchlistSlice.reducer;

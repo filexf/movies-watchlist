@@ -1,4 +1,8 @@
-export const AddIcon = ({ className = "w-5 h-5" }) => (
+interface IconProps {
+  className?: string;
+}
+
+export const AddIcon = ({ className = "w-5 h-5" }: IconProps) => (
   <svg
     className={className}
     fill="none"
@@ -10,7 +14,7 @@ export const AddIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-export const RemoveIcon = ({ className = "w-5 h-5" }) => (
+export const RemoveIcon = ({ className = "w-5 h-5" }: IconProps) => (
   <svg
     className={className}
     fill="none"
@@ -26,7 +30,7 @@ export const RemoveIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-export const PlayIcon = ({ className = "w-5 h-5" }) => (
+export const PlayIcon = ({ className = "w-5 h-5" }: IconProps) => (
   <svg
     className={className}
     fill="none"
@@ -47,7 +51,7 @@ export const PlayIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-export const CheckIcon = ({ className = "w-5 h-5" }) => (
+export const CheckIcon = ({ className = "w-5 h-5" }: IconProps) => (
   <svg
     className={className}
     fill="none"

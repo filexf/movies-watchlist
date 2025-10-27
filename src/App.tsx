@@ -1,12 +1,15 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MovieDetails from "./components/MovieDetails";
 import SavedNotification from "./components/ui/SavedNotification";
 import Footer from "./layouts/Footer";
 import Navbar from "./layouts/Navbar";
-import CategoryPage from "./pages/CategoryPage";
-import MovieSearch from "./pages/SearchPage";
-import WatchlistPage from "./pages/WatchlistPage";
+import CategoryPage from "./page-components/CategoryPage";
+import SearchPage from "./page-components/SearchPage";
+import WatchlistPage from "./page-components/WatchlistPage";
+import { AppDispatch, RootState } from "./store";
 import {
   clearSelectedMovie,
   fetchCategoryMovies,
@@ -36,10 +39,10 @@ const categories = [
 ];
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [page, setPage] = useState("categories");
 
-  // Charger les films populaires au démarrage
+  // Load popular movies on startup
   useEffect(() => {
     dispatch(fetchCategoryMovies(""));
   }, [dispatch]);
@@ -53,17 +56,16 @@ function App() {
     selectedMovie,
     movieDetails,
     loadingDetails,
-  } = useSelector((state) => state.movies);
+  } = useSelector((state: RootState) => state.movies);
 
   const {
     items: watchlist,
     sortBy,
     searchTerm: searchWatchlist,
-    showSaved,
-  } = useSelector((state) => state.watchlist);
+  } = useSelector((state: RootState) => state.watchlist);
 
-  // Gestionnaires d'événements
-  const handleSearch = (e) => {
+  // Event handlers
+  const handleSearch = (e: { preventDefault?: () => void }) => {
     if (e?.preventDefault) {
       e.preventDefault();
     }
@@ -72,12 +74,12 @@ function App() {
     }
   };
 
-  const handleCategorySelect = (cat) => {
+  const handleCategorySelect = (cat: string) => {
     dispatch(setCategory(cat));
     dispatch(fetchCategoryMovies(cat));
   };
 
-  const handleMovieSelect = (movie) => {
+  const handleMovieSelect = (movie: { id: number }) => {
     dispatch(fetchMovieDetails(movie.id));
   };
 
@@ -104,7 +106,7 @@ function App() {
         )}
 
         {page === "search" && (
-          <MovieSearch
+          <SearchPage
             query={query}
             setQuery={(q) => dispatch(setQuery(q))}
             searchMovies={handleSearch}
@@ -131,7 +133,7 @@ function App() {
           />
         )}
 
-        {selectedMovie && (
+        {selectedMovie && movieDetails && (
           <MovieDetails
             movieDetails={movieDetails}
             selectedMovie={selectedMovie}

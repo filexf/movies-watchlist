@@ -1,4 +1,8 @@
-export const GridIcon = ({ className = "w-5 h-5" }) => (
+interface IconProps {
+  className?: string;
+}
+
+export const GridIcon = ({ className = "w-5 h-5" }: IconProps) => (
   <svg
     className={className}
     fill="none"
@@ -14,7 +18,7 @@ export const GridIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-export const SearchIcon = ({ className = "w-5 h-5" }) => (
+export const SearchIcon = ({ className = "w-5 h-5" }: IconProps) => (
   <svg
     className={className}
     fill="none"
@@ -30,7 +34,7 @@ export const SearchIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-export const BookmarkIcon = ({ className = "w-5 h-5" }) => (
+export const BookmarkIcon = ({ className = "w-5 h-5" }: IconProps) => (
   <svg
     className={className}
     fill="none"
@@ -46,7 +50,7 @@ export const BookmarkIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-export const ClearIcon = ({ className = "w-4 h-4" }) => (
+export const ClearIcon = ({ className = "w-4 h-4" }: IconProps) => (
   <svg
     className={className}
     viewBox="0 0 24 24"

@@ -1,8 +1,27 @@
+"use client";
+
+import Image from "next/image";
 import { useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddToWatchlistButton from "../components/ui/AddToWatchlistButton";
 import Button from "../components/ui/Button";
-import { loadMoreMovies } from "../store/slices/moviesSlice";
+import { AppDispatch, RootState } from "../store";
+import { loadMoreMovies, Movie } from "../store/slices/moviesSlice";
+
+interface Category {
+  label: string;
+  value: string;
+}
+
+interface CategoryPageProps {
+  categories: Category[];
+  category: string;
+  fetchCategoryMovies: (cat: string) => void;
+  categoryMovies: Movie[];
+  loadingCategory: boolean;
+  fetchMovieDetails: (movie: Movie) => void;
+  addToWatchlist: (movie: Movie) => void;
+}
 
 const CategoryPage = ({
   categories,
@@ -12,15 +31,15 @@ const CategoryPage = ({
   loadingCategory,
   fetchMovieDetails,
   addToWatchlist,
-}) => {
-  const dispatch = useDispatch();
+}: CategoryPageProps) => {
+  const dispatch = useDispatch<AppDispatch>();
   const { currentPage, totalPages, loadingMore } = useSelector(
-    (state) => state.movies
+    (state: RootState) => state.movies
   );
-  const observer = useRef();
+  const observer = useRef<IntersectionObserver | null>(null);
 
   const lastMovieElementRef = useCallback(
-    (node) => {
+    (node: HTMLDivElement | null) => {
       if (loadingCategory || loadingMore) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
@@ -30,7 +49,7 @@ const CategoryPage = ({
       });
       if (node) observer.current.observe(node);
     },
-    [loadingCategory, loadingMore, currentPage, totalPages, category]
+    [loadingCategory, loadingMore, currentPage, totalPages, category, dispatch]
   );
 
   return (
@@ -66,9 +85,12 @@ const CategoryPage = ({
                 }
                 className="bg-neutral-800 rounded-lg shadow p-3 flex flex-col items-center border border-sky-900/30 hover:border-sky-900 transition-colors duration-200"
               >
-                <img
+                <Image
                   src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
                   alt={movie.title}
+                  width={160}
+                  height={224}
+                  unoptimized
                   className="w-24 md:w-40 h-36 md:h-56 object-cover rounded mb-2 cursor-pointer hover:scale-105 transition-transform duration-200"
                   onClick={() => fetchMovieDetails(movie)}
                 />

@@ -1,4 +1,14 @@
-const RatingStars = ({ rating, onRate, readOnly = false }) => {
+interface RatingStarsProps {
+  rating: number;
+  onRate: (rating: number) => void;
+  readOnly?: boolean;
+}
+
+const RatingStars = ({
+  rating,
+  onRate,
+  readOnly = false,
+}: RatingStarsProps) => {
   const starCount = 5;
 
   return (

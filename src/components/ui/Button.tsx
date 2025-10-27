@@ -1,11 +1,18 @@
+interface ButtonProps {
+  children: React.ReactNode;
+  onClick: () => void;
+  variant?: "default" | "success" | "danger";
+  active?: boolean;
+  className?: string;
+}
+
 const Button = ({
   children,
   onClick,
   variant = "default",
   active = false,
   className = "",
-  ...props
-}) => {
+}: ButtonProps) => {
   const baseClasses =
     "px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-neutral-900";
 
@@ -23,7 +30,6 @@ const Button = ({
     <button
       className={`${baseClasses} ${variants[variant]} ${className}`}
       onClick={onClick}
-      {...props}
     >
       {children}
     </button>
