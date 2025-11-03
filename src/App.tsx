@@ -1,15 +1,15 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import MovieDetails from "./components/MovieDetails";
-import SavedNotification from "./components/ui/SavedNotification";
-import Footer from "./layouts/Footer";
-import Navbar from "./layouts/Navbar";
-import CategoryPage from "./page-components/CategoryPage";
-import SearchPage from "./page-components/SearchPage";
-import WatchlistPage from "./page-components/WatchlistPage";
-import { AppDispatch, RootState } from "./store";
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import MovieDetails from './components/MovieDetails'
+import SavedNotification from './components/ui/SavedNotification'
+import Footer from './layouts/Footer'
+import Navbar from './layouts/Navbar'
+import CategoryPage from './page-components/CategoryPage'
+import SearchPage from './page-components/SearchPage'
+import WatchlistPage from './page-components/WatchlistPage'
+import type { AppDispatch, RootState } from './store'
 import {
   clearSelectedMovie,
   fetchCategoryMovies,
@@ -17,35 +17,35 @@ import {
   searchMovies,
   setCategory,
   setQuery,
-} from "./store/slices/moviesSlice";
+} from './store/slices/moviesSlice'
 import {
   addToWatchlistWithTimeout,
   removeFromWatchlist,
   setSearchTerm,
   setSortBy,
   updateMovie,
-} from "./store/slices/watchlistSlice";
+} from './store/slices/watchlistSlice'
 
 const categories = [
-  { label: "Tous", value: "" },
-  { label: "Action", value: "Action" },
-  { label: "Comédie", value: "Comedy" },
-  { label: "Drame", value: "Drama" },
-  { label: "Science-fiction", value: "Science Fiction" },
-  { label: "Animation", value: "Animation" },
-  { label: "Horreur", value: "Horror" },
-  { label: "Romance", value: "Romance" },
-  { label: "Documentaire", value: "Documentary" },
-];
+  { label: 'Tous', value: '' },
+  { label: 'Action', value: 'Action' },
+  { label: 'Comédie', value: 'Comedy' },
+  { label: 'Drame', value: 'Drama' },
+  { label: 'Science-fiction', value: 'Science Fiction' },
+  { label: 'Animation', value: 'Animation' },
+  { label: 'Horreur', value: 'Horror' },
+  { label: 'Romance', value: 'Romance' },
+  { label: 'Documentaire', value: 'Documentary' },
+]
 
 function App() {
-  const dispatch = useDispatch<AppDispatch>();
-  const [page, setPage] = useState("categories");
+  const dispatch = useDispatch<AppDispatch>()
+  const [page, setPage] = useState('categories')
 
   // Load popular movies on startup
   useEffect(() => {
-    dispatch(fetchCategoryMovies(""));
-  }, [dispatch]);
+    dispatch(fetchCategoryMovies(''))
+  }, [dispatch])
 
   const {
     query,
@@ -56,32 +56,32 @@ function App() {
     selectedMovie,
     movieDetails,
     loadingDetails,
-  } = useSelector((state: RootState) => state.movies);
+  } = useSelector((state: RootState) => state.movies)
 
   const {
     items: watchlist,
     sortBy,
     searchTerm: searchWatchlist,
-  } = useSelector((state: RootState) => state.watchlist);
+  } = useSelector((state: RootState) => state.watchlist)
 
   // Event handlers
   const handleSearch = (e: { preventDefault?: () => void }) => {
     if (e?.preventDefault) {
-      e.preventDefault();
+      e.preventDefault()
     }
     if (query.length >= 1) {
-      dispatch(searchMovies({ query, category }));
+      dispatch(searchMovies({ query, category }))
     }
-  };
+  }
 
   const handleCategorySelect = (cat: string) => {
-    dispatch(setCategory(cat));
-    dispatch(fetchCategoryMovies(cat));
-  };
+    dispatch(setCategory(cat))
+    dispatch(fetchCategoryMovies(cat))
+  }
 
   const handleMovieSelect = (movie: { id: number }) => {
-    dispatch(fetchMovieDetails(movie.id));
-  };
+    dispatch(fetchMovieDetails(movie.id))
+  }
 
   return (
     <main className="min-h-screen bg-neutral-900 bg-gradient-to-b from-neutral-900 to-neutral-800">
@@ -91,7 +91,7 @@ function App() {
         </h1>
         <Navbar page={page} setPage={setPage} />
 
-        {page === "categories" && (
+        {page === 'categories' && (
           <CategoryPage
             categories={categories}
             category={category}
@@ -99,37 +99,31 @@ function App() {
             categoryMovies={categoryMovies}
             loadingCategory={loadingCategory}
             fetchMovieDetails={handleMovieSelect}
-            addToWatchlist={(movie) =>
-              dispatch(addToWatchlistWithTimeout(movie))
-            }
+            addToWatchlist={movie => dispatch(addToWatchlistWithTimeout(movie))}
           />
         )}
 
-        {page === "search" && (
+        {page === 'search' && (
           <SearchPage
             query={query}
-            setQuery={(q) => dispatch(setQuery(q))}
+            setQuery={q => dispatch(setQuery(q))}
             searchMovies={handleSearch}
             results={results}
             fetchMovieDetails={handleMovieSelect}
-            addToWatchlist={(movie) =>
-              dispatch(addToWatchlistWithTimeout(movie))
-            }
+            addToWatchlist={movie => dispatch(addToWatchlistWithTimeout(movie))}
           />
         )}
 
-        {page === "watchlist" && (
+        {page === 'watchlist' && (
           <WatchlistPage
             watchlist={watchlist}
             fetchMovieDetails={handleMovieSelect}
             sortBy={sortBy}
-            setSortBy={(sort) => dispatch(setSortBy(sort))}
+            setSortBy={sort => dispatch(setSortBy(sort))}
             searchWatchlist={searchWatchlist}
-            setSearchWatchlist={(term) => dispatch(setSearchTerm(term))}
-            updateMovie={(id, updates) =>
-              dispatch(updateMovie({ id, updates }))
-            }
-            removeFromWatchlist={(id) => dispatch(removeFromWatchlist(id))}
+            setSearchWatchlist={term => dispatch(setSearchTerm(term))}
+            updateMovie={(id, updates) => dispatch(updateMovie({ id, updates }))}
+            removeFromWatchlist={id => dispatch(removeFromWatchlist(id))}
           />
         )}
 
@@ -140,13 +134,9 @@ function App() {
             loadingDetails={loadingDetails}
             setSelectedMovie={() => dispatch(clearSelectedMovie())}
             watchlist={watchlist}
-            addToWatchlist={(movie) =>
-              dispatch(addToWatchlistWithTimeout(movie))
-            }
-            removeFromWatchlist={(id) => dispatch(removeFromWatchlist(id))}
-            updateMovie={(id, updates) =>
-              dispatch(updateMovie({ id, updates }))
-            }
+            addToWatchlist={movie => dispatch(addToWatchlistWithTimeout(movie))}
+            removeFromWatchlist={id => dispatch(removeFromWatchlist(id))}
+            updateMovie={(id, updates) => dispatch(updateMovie({ id, updates }))}
           />
         )}
 
@@ -154,7 +144,7 @@ function App() {
       </div>
       <Footer />
     </main>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -1,114 +1,114 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import { useEffect } from "react";
-import AddToWatchlistButton from "../components/ui/AddToWatchlistButton";
-import { ClearIcon } from "../icons/NavIcons";
-import { Movie } from "../store/slices/moviesSlice";
+import Image from 'next/image'
+import { useEffect } from 'react'
+import AddToWatchlistButton from '../components/ui/AddToWatchlistButton'
+import { ClearIcon } from '../icons/NavIcons'
+import type { Movie } from '../store/slices/moviesSlice'
 
 interface SearchSuggestion {
-  category: string;
-  items: Array<{ text: string; emoji: string }>;
+  category: string
+  items: Array<{ text: string; emoji: string }>
 }
 
 const searchSuggestions: SearchSuggestion[] = [
   {
-    category: "Science-Fiction",
+    category: 'Science-Fiction',
     items: [
-      { text: "Star Wars", emoji: "🚀" },
-      { text: "Matrix", emoji: "🕶" },
-      { text: "Blade Runner", emoji: "🌆" },
-      { text: "Interstellar", emoji: "🌌" },
-      { text: "Dune", emoji: "🏜️" },
-      { text: "Alien", emoji: "👽" },
+      { text: 'Star Wars', emoji: '🚀' },
+      { text: 'Matrix', emoji: '🕶' },
+      { text: 'Blade Runner', emoji: '🌆' },
+      { text: 'Interstellar', emoji: '🌌' },
+      { text: 'Dune', emoji: '🏜️' },
+      { text: 'Alien', emoji: '👽' },
     ],
   },
   {
-    category: "Super-héros",
+    category: 'Super-héros',
     items: [
-      { text: "Marvel", emoji: "🦸‍♂️" },
-      { text: "Batman", emoji: "🦇" },
-      { text: "Spider-Man", emoji: "🕷️" },
-      { text: "Wonder Woman", emoji: "⚡" },
-      { text: "Black Panther", emoji: "🐆" },
-      { text: "Avengers", emoji: "🛡️" },
+      { text: 'Marvel', emoji: '🦸‍♂️' },
+      { text: 'Batman', emoji: '🦇' },
+      { text: 'Spider-Man', emoji: '🕷️' },
+      { text: 'Wonder Woman', emoji: '⚡' },
+      { text: 'Black Panther', emoji: '🐆' },
+      { text: 'Avengers', emoji: '🛡️' },
     ],
   },
   {
-    category: "Animation",
+    category: 'Animation',
     items: [
-      { text: "Miyazaki", emoji: "✨" },
-      { text: "Pixar", emoji: "🪄" },
-      { text: "Dragon", emoji: "🐉" },
-      { text: "Toy Story", emoji: "🤠" },
-      { text: "Disney", emoji: "🏰" },
-      { text: "Frozen", emoji: "❄️" },
+      { text: 'Miyazaki', emoji: '✨' },
+      { text: 'Pixar', emoji: '🪄' },
+      { text: 'Dragon', emoji: '🐉' },
+      { text: 'Toy Story', emoji: '🤠' },
+      { text: 'Disney', emoji: '🏰' },
+      { text: 'Frozen', emoji: '❄️' },
     ],
   },
   {
-    category: "Fantastique",
+    category: 'Fantastique',
     items: [
-      { text: "Harry Potter", emoji: "⚡️" },
-      { text: "Seigneur des Anneaux", emoji: "💍" },
-      { text: "Pirates des Caraïbes", emoji: "🏴‍☠️" },
-      { text: "Narnia", emoji: "🦁" },
-      { text: "Avatar", emoji: "🌳" },
-      { text: "Game of Thrones", emoji: "🐲" },
+      { text: 'Harry Potter', emoji: '⚡️' },
+      { text: 'Seigneur des Anneaux', emoji: '💍' },
+      { text: 'Pirates des Caraïbes', emoji: '🏴‍☠️' },
+      { text: 'Narnia', emoji: '🦁' },
+      { text: 'Avatar', emoji: '🌳' },
+      { text: 'Game of Thrones', emoji: '🐲' },
     ],
   },
   {
-    category: "Films Cultes",
+    category: 'Films Cultes',
     items: [
-      { text: "Inception", emoji: "🌀" },
-      { text: "Fight Club", emoji: "👊" },
-      { text: "Pulp Fiction", emoji: "🕴️" },
-      { text: "Retour vers le Futur", emoji: "⏰" },
-      { text: "Shawshank", emoji: "🔒" },
-      { text: "Godfather", emoji: "🎭" },
+      { text: 'Inception', emoji: '🌀' },
+      { text: 'Fight Club', emoji: '👊' },
+      { text: 'Pulp Fiction', emoji: '🕴️' },
+      { text: 'Retour vers le Futur', emoji: '⏰' },
+      { text: 'Shawshank', emoji: '🔒' },
+      { text: 'Godfather', emoji: '🎭' },
     ],
   },
   {
-    category: "Thriller",
+    category: 'Thriller',
     items: [
-      { text: "Seven", emoji: "🔍" },
-      { text: "Silence des Agneaux", emoji: "🦋" },
-      { text: "Gone Girl", emoji: "📓" },
-      { text: "Memento", emoji: "📷" },
-      { text: "Shutter Island", emoji: "🏝️" },
-      { text: "Prestige", emoji: "🎩" },
+      { text: 'Seven', emoji: '🔍' },
+      { text: 'Silence des Agneaux', emoji: '🦋' },
+      { text: 'Gone Girl', emoji: '📓' },
+      { text: 'Memento', emoji: '📷' },
+      { text: 'Shutter Island', emoji: '🏝️' },
+      { text: 'Prestige', emoji: '🎩' },
     ],
   },
   {
-    category: "Comédie",
+    category: 'Comédie',
     items: [
-      { text: "Hangover", emoji: "🎲" },
-      { text: "Superbad", emoji: "🎉" },
-      { text: "Bridesmaids", emoji: "👰" },
-      { text: "OSS 117", emoji: "🕵️" },
-      { text: "La Cité de la Peur", emoji: "🎪" },
-      { text: "Les Visiteurs", emoji: "⚔️" },
+      { text: 'Hangover', emoji: '🎲' },
+      { text: 'Superbad', emoji: '🎉' },
+      { text: 'Bridesmaids', emoji: '👰' },
+      { text: 'OSS 117', emoji: '🕵️' },
+      { text: 'La Cité de la Peur', emoji: '🎪' },
+      { text: 'Les Visiteurs', emoji: '⚔️' },
     ],
   },
   {
-    category: "Romance",
+    category: 'Romance',
     items: [
-      { text: "Titanic", emoji: "🚢" },
-      { text: "La La Land", emoji: "🎹" },
-      { text: "Notebook", emoji: "📔" },
-      { text: "Amélie Poulain", emoji: "💝" },
-      { text: "Pretty Woman", emoji: "👠" },
-      { text: "Love Actually", emoji: "🎄" },
+      { text: 'Titanic', emoji: '🚢' },
+      { text: 'La La Land', emoji: '🎹' },
+      { text: 'Notebook', emoji: '📔' },
+      { text: 'Amélie Poulain', emoji: '💝' },
+      { text: 'Pretty Woman', emoji: '👠' },
+      { text: 'Love Actually', emoji: '🎄' },
     ],
   },
-];
+]
 
 interface SearchPageProps {
-  query: string;
-  setQuery: (query: string) => void;
-  searchMovies: (e: { preventDefault: () => void }) => void;
-  results: Movie[];
-  fetchMovieDetails: (movie: Movie) => void;
-  addToWatchlist: (movie: Movie) => void;
+  query: string
+  setQuery: (query: string) => void
+  searchMovies: (e: { preventDefault: () => void }) => void
+  results: Movie[]
+  fetchMovieDetails: (movie: Movie) => void
+  addToWatchlist: (movie: Movie) => void
 }
 
 const SearchPage = ({
@@ -123,12 +123,12 @@ const SearchPage = ({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (query.length >= 1) {
-        searchMovies({ preventDefault: () => {} });
+        searchMovies({ preventDefault: () => {} })
       }
-    }, 300); // 300ms delay to avoid too many API calls
+    }, 300) // 300ms delay to avoid too many API calls
 
-    return () => clearTimeout(timeoutId);
-  }, [query, searchMovies]);
+    return () => clearTimeout(timeoutId)
+  }, [query, searchMovies])
 
   return (
     <div>
@@ -138,11 +138,12 @@ const SearchPage = ({
             className="w-full border rounded px-4 py-2 bg-neutral-800 text-gray-100 placeholder-gray-400 border-neutral-700 focus:border-sky-600 focus:ring-0 pr-10"
             placeholder="Rechercher un film..."
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={e => setQuery(e.target.value)}
           />
           {query && (
             <button
-              onClick={() => setQuery("")}
+              type="button"
+              onClick={() => setQuery('')}
               className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 p-1.5 rounded-full hover:bg-neutral-700/50 transition-colors"
               aria-label="Effacer la recherche"
             >
@@ -158,7 +159,7 @@ const SearchPage = ({
             Découvrez des films par catégorie :
           </div>
           <div className="space-y-6">
-            {searchSuggestions.map((category) => (
+            {searchSuggestions.map(category => (
               <div key={category.category}>
                 <div className="text-sky-400 text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
                   {category.category}
@@ -167,6 +168,7 @@ const SearchPage = ({
                 <div className="flex flex-wrap gap-2">
                   {category.items.map(({ text, emoji }) => (
                     <button
+                      type="button"
                       key={text}
                       onClick={() => setQuery(text)}
                       className="px-3 py-1.5 bg-neutral-800/50 rounded-full text-sm text-gray-300 hover:bg-neutral-700/50 hover:text-white transition-all flex items-center gap-1.5 group border border-neutral-700/50 hover:border-sky-900"
@@ -185,7 +187,7 @@ const SearchPage = ({
       )}
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {results.map((movie) => (
+        {results.map(movie => (
           <div
             key={movie.id}
             className="bg-neutral-800 rounded-lg shadow p-3 flex flex-col items-center border border-sky-900/30 hover:border-sky-900 transition-colors duration-200"
@@ -202,21 +204,17 @@ const SearchPage = ({
             <div className="font-semibold text-center text-sm mb-1 text-gray-100">
               {movie.title}
             </div>
-            <div className="text-sm text-gray-400 mb-3">
-              {movie.release_date?.split("-")[0]}
-            </div>
+            <div className="text-sm text-gray-400 mb-3">{movie.release_date?.split('-')[0]}</div>
             <AddToWatchlistButton movie={movie} onAdd={addToWatchlist} />
           </div>
         ))}
       </div>
 
       {results.length === 0 && query && (
-        <div className="text-center text-gray-400 py-8">
-          Aucun film trouvé pour cette recherche
-        </div>
+        <div className="text-center text-gray-400 py-8">Aucun film trouvé pour cette recherche</div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default SearchPage;
+export default SearchPage

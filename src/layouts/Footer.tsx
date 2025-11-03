@@ -1,5 +1,5 @@
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear()
 
   return (
     <footer className="z-30 mt-12 py-12 border-t border-neutral-800 bg-neutral-900/80 backdrop-blur-sm">
@@ -8,9 +8,8 @@ const Footer = () => {
           <div>
             <h3 className="text-sky-400 font-semibold mb-3">À propos</h3>
             <p className="text-sm text-gray-400">
-              The Movie Watchlist vous permet de découvrir, rechercher et
-              organiser vos films préférés. Créez votre liste personnalisée et
-              notez vos films.
+              The Movie Watchlist vous permet de découvrir, rechercher et organiser vos films
+              préférés. Créez votre liste personnalisée et notez vos films.
             </p>
           </div>
 
@@ -24,8 +23,7 @@ const Footer = () => {
                 <span className="text-sky-500">✓</span> Catégories de films
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-sky-500">✓</span> Liste de films
-                personnalisée
+                <span className="text-sky-500">✓</span> Liste de films personnalisée
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-sky-500">✓</span> Système de notation
@@ -37,7 +35,7 @@ const Footer = () => {
             <h3 className="text-sky-400 font-semibold mb-3">Informations</h3>
             <ul className="text-sm text-gray-400 space-y-2">
               <li>
-                Propulsé par{" "}
+                Propulsé par{' '}
                 <a
                   href="https://www.themoviedb.org"
                   target="_blank"
@@ -64,7 +62,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer
